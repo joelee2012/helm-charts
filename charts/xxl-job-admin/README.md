@@ -17,15 +17,15 @@ Helm's [documentation](https://helm.sh/docs) to get started.
 
 Once Helm has been set up correctly, add the repo as follows:
 
-    helm repo add xxl-job https://joelee2012.github.io/helm-charts
+    helm repo add <alias> https://joelee2012.github.io/helm-charts
 
 If you had already added this repo earlier, run `helm repo update` to retrieve
 the latest versions of the packages.  You can then run `helm search repo
-xxl-job` to see the charts.
+xxl-job-admin` to see the charts.
 
 To install the xxl-job-admin chart:
 
-    helm install my-xxl-job-admin xxl-job/xxl-job-admin
+    helm install my-xxl-job-admin <alias>/xxl-job-admin
 
 To uninstall the chart:
 
@@ -39,7 +39,7 @@ To see all configurable options with detailed comments, visit the chart's [value
 
 ```console
 # Helm 3
-$ helm show values xxl-job/xxl-job-admin
+$ helm show values <alias>/xxl-job-admin
 ```
 
 ## Configure database 
