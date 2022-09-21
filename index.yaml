@@ -1,0 +1,25 @@
+apiVersion: v1
+entries:
+  xxl-job-admin:
+  - annotations:
+      artifacthub.io/images: |
+        - name: xxl-job-admin
+          image: xuxueli/xxl-job-admin:2.3.1
+    apiVersion: v2
+    appVersion: 2.3.1
+    created: "2022-09-21T03:24:11.948715356Z"
+    description: XXL-JOB is a distributed task scheduling framework
+    digest: aaacd2034d1b470526e8405d1cc8c83b92f476ad7c4343038e0f3ba73f53c001
+    home: https://github.com/xuxueli/xxl-job/
+    maintainers:
+    - email: lj_2005@163.com
+      name: joelee2012
+      url: https://github.com/joelee2012
+    name: xxl-job-admin
+    sources:
+    - https://github.com/xuxueli/xxl-job/
+    type: application
+    urls:
+    - https://github.com/joelee2012/helm-charts/releases/download/xxl-job-admin-0.0.2/xxl-job-admin-0.0.2.tgz
+    version: 0.0.2
+generated: "2022-09-21T03:24:11.948724156Z"
