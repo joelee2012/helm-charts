@@ -1,6 +1,6 @@
 apiVersion: v2
 name: xxl-job-admin
-description: XXL-JOB is a distributed task scheduling framework
+description: XXL-JOB-ADMIN is task admin center
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -28,9 +28,15 @@ maintainers:
     email: lj_2005@163.com
     url: https://github.com/joelee2012
 home: https://github.com/xuxueli/xxl-job/
+
 sources:
   - https://github.com/xuxueli/xxl-job/
+
 annotations:
   artifacthub.io/images: |
-    - name: xxl-job-admin
+    - name: xuxueli/xxl-job-admin:2.3.1
       image: xuxueli/xxl-job-admin:2.3.1
+  artifacthub.io/license: Apache-2.0
+  artifacthub.io/links: |
+    - name: Chart Source
+      url: https://github.com/joelee2012/helm-charts/tree/main/charts/xxl-job-admin
