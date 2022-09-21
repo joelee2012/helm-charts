@@ -14,12 +14,14 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+## configure the database detail
 database:
   url:
   user:
   password:
   db: xxl_job
 
+## overwrite the default value of properties in application.yaml
 properties:
   management:
     health:
