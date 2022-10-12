@@ -52,20 +52,20 @@ spec:
               mountPath: /var/run/secrets/spring/
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.properties.server.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /actuator/health/liveness
+              path: {{ include "xxl-job-admin.healthCheckEndpoint" . }}/liveness
               port: http
           readinessProbe:
             httpGet:
-              path: /actuator/health/readiness
+              path: {{ include "xxl-job-admin.healthCheckEndpoint" . }}/readiness
               port: http
           startupProbe:
             httpGet:
               port: http
-              path: /actuator/health/liveness
+              path: {{ include "xxl-job-admin.healthCheckEndpoint" . }}/liveness
             initialDelaySeconds: 15
             failureThreshold: 30
           resources:

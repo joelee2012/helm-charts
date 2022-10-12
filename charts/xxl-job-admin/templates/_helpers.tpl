@@ -60,3 +60,8 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{- define "xxl-job-admin.healthCheckEndpoint" -}}
+{{- $contextPath := get .Values.properties.server.servlet "context-path" }}
+{{- printf "%s/%s" $contextPath "actuator/health" | replace "//" "/" }}
+{{- end }}
