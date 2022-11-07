@@ -35,7 +35,7 @@ properties:
   server:
     port: 8080
     servlet:
-      context-path: /
+      context-path: /xxl-job-admin
   spring:
     datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -83,7 +83,7 @@ properties:
       static-locations: classpath:/static/
   xxl:
     job:
-      accessToken: ""
+      accessToken: "default_token"
       i18n: zh_CN
       logretentiondays: 30
       triggerpool:
@@ -118,7 +118,7 @@ securityContext:
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 ingress:
   enabled: false
@@ -130,7 +130,7 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /
+        - path: /xxl-job-admin
           pathType: ImplementationSpecific
   tls: []
   #  - secretName: chart-example-tls
