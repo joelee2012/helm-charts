@@ -1,0 +1,42 @@
+{{- if .Values.initDB.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "xxl-job-admin.fullname" . }}-init-db
+  annotations:
+    "helm.sh/hook-weight": "-1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels: {{- include "xxl-job-admin.labels" . | nindent 4 }}
+spec:
+  template:
+    metadata:
+      labels: {{- include "xxl-job-admin.labels" . | nindent 4 }}
+    spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: init-db
+        image: "{{ .Values.initDB.image.registry }}:{{ .Values.initDB.image.tag }}"
+        imagePullPolicy: {{ .Values.initDB.image.pullPolicy }}
+        envFrom: 
+          - secretRef:
+            - name: {{ include "xxl-job-admin.fullname" . }}
+      restartPolicy: OnFailure
+  parallelism: 1
+  completions: 1
+  backoffLimit: 6
+{{- end }}

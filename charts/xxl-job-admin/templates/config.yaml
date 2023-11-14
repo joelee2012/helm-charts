@@ -7,3 +7,11 @@ metadata:
 data:
   application.yaml: |
 {{ toYaml .Values.properties | indent 4 }}
+{{- if .Values.skywalking.enabled }}
+  init_skywalking.sh: |
+{{ tpl .Values.skywalking.initScript . | indent 4 }}
+{{- end }}
+{{- if .Values.initDB.enabled }}
+  init.sql: |
+{{ tpl .Values.initDB.script . | indent 4 }}
+{{- end }}

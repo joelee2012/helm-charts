@@ -30,12 +30,29 @@ spec:
         - name: config
           configMap:
             name: {{ include "xxl-job-admin.fullname" . }}-config
-        - name: creds
-          secret:
-            secretName: {{ include "xxl-job-admin.fullname" . }}-creds
+        {{- if .Values.skywalking.enabled }}
+        - name: skywalking-agent
+          emptyDir: {}
+        {{- end }}
       serviceAccountName: {{ include "xxl-job-admin.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      {{- with .Values.initContainers }}
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.skywalking.enabled }}
+        - name: agent-container
+          image: "apache/skywalking-java-agent:{{ .Values.skywalking.version }}-alpine"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: skywalking-agent
+              mountPath: /agent
+            - name: {{ include "xxl-job-admin.fullname" . }}-config
+              mountPath: /tmp
+          command: ["/bin/sh"]
+          args: ["/tmp/init_skywalking.sh"]
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -43,13 +60,27 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: SPRING_CONFIG_IMPORT
-              value: optional:configtree:/var/run/secrets/spring/
+          {{- if or .Values.skywalking.enabled .Values.javaOpts }}
+            - name: JAVA_OPTS
+              value: >-
+                {{- if .Values.skywalking.enabled }}
+                -javaagent:/skywalking/agent/skywalking-agent.jar
+                {{- end }}
+                {{ .Values.javaOpts }}
+          {{- end }}
+          {{- with .Values.extraEnv }}
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+          envFrom: 
+            - secretRef:
+              - name: {{ include "xxl-job-admin.fullname" . }}
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: creds
-              mountPath: /var/run/secrets/spring/
+            {{- if .Values.skywalking.enabled }}
+            - name: skywalking-agent
+              mountPath: /skywalking
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.properties.server.port }}
