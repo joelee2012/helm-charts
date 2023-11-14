@@ -73,7 +73,7 @@ spec:
           {{- end }}
           envFrom: 
             - secretRef:
-              - name: {{ include "xxl-job-admin.fullname" . }}
+                name: {{ include "xxl-job-admin.fullname" . }}
           volumeMounts:
             - name: config
               mountPath: /config

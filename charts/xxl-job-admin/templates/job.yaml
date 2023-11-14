@@ -4,13 +4,14 @@ kind: Job
 metadata:
   name: {{ include "xxl-job-admin.fullname" . }}-init-db
   annotations:
-    "helm.sh/hook-weight": "-1"
+    "helm.sh/hook-weight": "1"
+    # "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   labels: {{- include "xxl-job-admin.labels" . | nindent 4 }}
 spec:
   template:
     metadata:
-      labels: {{- include "xxl-job-admin.labels" . | nindent 4 }}
+      labels: {{- include "xxl-job-admin.labels" . | nindent 8 }}
     spec:
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -36,18 +37,13 @@ spec:
       - name: init-db
         image: "{{ .Values.initDB.image.registry }}:{{ .Values.initDB.image.tag }}"
         imagePullPolicy: {{ .Values.initDB.image.pullPolicy }}
-        command: ['mysql']
+        command: ['sh', '-cex']
         args:
-          - -u$(MYSQL_USER)
-          - -p$(MYSQL_PASSWORD)
-          - -h${MYSQL_HOST}
-          - -P$(MYSQL_PORT)
-          - $(MYSQL_DATABASE)
-          - < 
-          - /config/init.sql
+          - |
+            mysql -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) -h$(MYSQL_HOST) -P$(MYSQL_PORT) $(MYSQL_DATABASE) < /config/init.sql
         envFrom: 
           - secretRef:
-            - name: {{ include "xxl-job-admin.fullname" . }}
+              name: {{ include "xxl-job-admin.fullname" . }}
         volumeMounts:
             - name: config
               mountPath: /config
