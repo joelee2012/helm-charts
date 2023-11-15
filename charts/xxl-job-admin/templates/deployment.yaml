@@ -68,7 +68,7 @@ spec:
                 {{- end }}
                 {{ .Values.javaOpts }}
           {{- end }}
-          {{- with .Values.extraEnv }}
+          {{- with .Values.env }}
             {{ toYaml . | nindent 12 }}
           {{- end }}
           envFrom: 

@@ -40,7 +40,9 @@ spec:
         command: ['sh', '-cex']
         args:
           - |
-            mysql -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) -h$(MYSQL_HOST) -P$(MYSQL_PORT) $(MYSQL_DATABASE) < /config/init.sql
+            sed "/e10adc3949ba59abbe56e057f20f883e/s/admin/$(XXL_ADMIN_USER)/g;s/e10adc3949ba59abbe56e057f20f883e/$(XXL_ADMIN_PASSWORD)/g" /config/init.sql > /tmp/init.sql
+            trap 'rm /tmp/init.sql'
+            mysql -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) -h$(MYSQL_HOST) -P$(MYSQL_PORT) $(MYSQL_DATABASE) < /tmp/init.sql
         envFrom: 
           - secretRef:
               name: {{ include "xxl-job-admin.fullname" . }}
