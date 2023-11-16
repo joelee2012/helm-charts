@@ -22,11 +22,6 @@ mysql:
   password: changeme
   database: xxl_job
 
-admin:
-  username: admin
-  # md5 encrypted string, default is 123456
-  password: e10adc3949ba59abbe56e057f20f883e
-
 initDB:
   enabled: true
   image:
