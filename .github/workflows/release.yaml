@@ -2,6 +2,8 @@ name: Release Charts
 
 on:
   push:
+    branches:
+      - main
 
 jobs:
   release:
@@ -17,24 +19,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Install Helm
-        uses: azure/setup-helm@v2.1
-        with:
-          version: v3.12.2
-
-      - name: Install unittest plugin
-        run: |
-          helm env
-          helm plugin install https://github.com/helm-unittest/helm-unittest
-
-      - name: Run unittest
-        run: |
-          for chart in charts/*; do
-            helm unittest $chart
-          done
-
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.4.0
-        if: github.ref_name == 'main'
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
