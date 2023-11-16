@@ -69,8 +69,6 @@ Or download the `tables_xxl_job.sql` from https://github.com/xuxueli/xxl-job/blo
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| admin.password | string | `"e10adc3949ba59abbe56e057f20f883e"` |  |
-| admin.username | string | `"admin"` |  |
 | affinity | object | `{}` |  |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `100` |  |
