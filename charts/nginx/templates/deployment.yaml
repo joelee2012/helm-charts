@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nginx.fullname" . }}
+  labels:
+    {{- include "nginx.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "nginx.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret-sha: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/config-sha: {{ include (print $.Template.BasePath "/conf-tpl-configmap.yaml") . | sha256sum }}
+        checksum/config-sha: {{ include (print $.Template.BasePath "/script-configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "nginx.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "nginx.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.env }}
+          env:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            {{- range .Values.upstreamServers }}
+            - name: {{ .name }}
+              containerPort: {{ .port }}
+              protocol: TCP
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/nginx/templates
+              name: config-tpl
+            {{- range .Values.upstreamServers }}
+            - name: {{ .name }}-tls-cert
+              mountPath: /usr/local/{{ .name }}/certificates/
+            {{- end }}
+            {{- if .Values.entryPointScripts }}
+            {{- range $key, $val := .Values.entryPointScripts }}
+            - name: scripts
+              mountPath: /docker-entrypoint.d/{{ $key }}
+              subPath: {{ $key }}
+            {{- end }}
+            {{- end }}
+            {{- with .Values.volumeMounts }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: config-tpl
+          configMap:
+            name: {{ include "nginx.fullname" . }}
+        {{- range .Values.upstreamServers }}
+        - name: {{ .name }}-tls-cert
+          secret:
+            secretName: {{ include "nginx.fullname" $ }}-{{ .name }}
+        {{- end }}
+        {{- if .Values.entryPointScripts }}
+        - name: scripts
+          configMap:
+            name: {{ include "nginx.fullname" . }}-scripts
+            items:
+            {{- range $key, $val := .Values.entryPointScripts }}
+              - key: {{ $key }}
+                path: {{ $key }}
+                mode: 0777
+            {{- end }}
+        {{- end }}
+        {{- with .Values.volumes }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

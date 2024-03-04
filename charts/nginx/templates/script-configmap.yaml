@@ -1,0 +1,13 @@
+{{- if .Values.entryPointScripts }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "nginx.fullname" . }}-scripts
+  labels:
+    {{- include "nginx.labels" . | nindent 4 }}
+data:
+{{- range $key, $val := .Values.entryPointScripts }}
+  {{ $key }}: |
+  {{ tpl $val $ | indent 2 }} 
+{{- end }}
+{{- end }}
