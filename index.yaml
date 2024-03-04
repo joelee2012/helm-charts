@@ -1,5 +1,16 @@
 apiVersion: v1
 entries:
+  nginx:
+  - apiVersion: v2
+    appVersion: "1.25"
+    created: "2024-03-04T08:39:28.015181113Z"
+    description: A Helm chart for Kubernetes
+    digest: d454a49bc2c7226f0a28e1429e6152c4c69b842082c64895fc18460180f02b64
+    name: nginx
+    type: application
+    urls:
+    - https://github.com/joelee2012/helm-charts/releases/download/nginx-0.1.0/nginx-0.1.0.tgz
+    version: 0.1.0
   xxl-job-admin:
   - annotations:
       artifacthub.io/images: |
@@ -168,4 +179,4 @@ entries:
     urls:
     - https://github.com/joelee2012/helm-charts/releases/download/xxl-job-admin-0.0.2/xxl-job-admin-0.0.2.tgz
     version: 0.0.2
-generated: "2023-11-16T09:19:17.415183165Z"
+generated: "2024-03-04T08:39:28.015207893Z"
