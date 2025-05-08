@@ -179,4 +179,30 @@ entries:
     urls:
     - https://github.com/joelee2012/helm-charts/releases/download/xxl-job-admin-0.0.2/xxl-job-admin-0.0.2.tgz
     version: 0.0.2
-generated: "2024-03-04T08:39:28.015207893Z"
+  yapi:
+  - annotations:
+      artifacthub.io/images: |
+        - name: jayfong/yapi:1.10.2
+          image: jayfong/yapi:1.10.2
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/joelee2012/helm-charts/tree/main/charts/yapi
+    apiVersion: v2
+    appVersion: 1.10.2
+    created: "2025-05-08T03:37:26.240128274Z"
+    description: A Helm chart for yapi
+    digest: 2cb379fb25bc0e6231fa4e41914e55e96eea1ec0fafba24f034a8321f74dd6b2
+    home: https://github.com/fjc0k/docker-YApi
+    maintainers:
+    - email: lj_2005@163.com
+      name: joelee2012
+      url: https://github.com/joelee2012
+    name: yapi
+    sources:
+    - https://github.com/YMFE/yapi
+    type: application
+    urls:
+    - https://github.com/joelee2012/helm-charts/releases/download/yapi-0.1.0/yapi-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-05-08T03:37:26.240145817Z"
