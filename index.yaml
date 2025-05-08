@@ -181,6 +181,33 @@ entries:
     version: 0.0.2
   yapi:
   - annotations:
+      artifacthub.io/changes: |
+        - Add doc
+      artifacthub.io/images: |
+        - name: yapi
+          image: jayfong/yapi:1.10.2
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/joelee2012/helm-charts/tree/main/charts/yapi
+    apiVersion: v2
+    appVersion: 1.10.2
+    created: "2025-05-08T06:08:30.652341366Z"
+    description: A Helm chart for yapi
+    digest: 233951a67b834455f1879da70ad0015fec7953ff1c859e0fb19d0375ac1b3bea
+    home: https://github.com/fjc0k/docker-YApi
+    maintainers:
+    - email: lj_2005@163.com
+      name: joelee2012
+      url: https://github.com/joelee2012
+    name: yapi
+    sources:
+    - https://github.com/YMFE/yapi
+    type: application
+    urls:
+    - https://github.com/joelee2012/helm-charts/releases/download/yapi-0.2.0/yapi-0.2.0.tgz
+    version: 0.2.0
+  - annotations:
       artifacthub.io/images: |
         - name: jayfong/yapi:1.10.2
           image: jayfong/yapi:1.10.2
@@ -205,4 +232,4 @@ entries:
     urls:
     - https://github.com/joelee2012/helm-charts/releases/download/yapi-0.1.0/yapi-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-08T03:37:26.240145817Z"
+generated: "2025-05-08T06:08:30.652364489Z"
